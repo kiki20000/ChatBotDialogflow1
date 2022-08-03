@@ -1,0 +1,29 @@
+{
+    "name": "wh_wordpress",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "watch": {
+        "localDeploy": "*.js"
+    },
+    "scripts": {
+        "localDeploy": "functions-framework --target=wh_wordpress --reload",
+        "deploy": "./deploy.sh",
+        "start": "development.bat"
+    },
+    "dependencies": {
+        "@google-cloud/functions-framework": "^2.0.0",
+        "@woocommerce/woocommerce-rest-api": "^1.0.1",
+        "actions-on-google": "^2.12.0",
+        "cors": "^2.8.5",
+        "dialogflow-fulfillment": "^0.6.1",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "google-auth-library": "^7.10.2",
+        "jsonwebtoken": "^8.5.1",
+        "npm-watch": "^0.7.0"
+    },
+    "keywords": [],
+    "author": "1MillionBot",
+    "license": "ISC"
+}
