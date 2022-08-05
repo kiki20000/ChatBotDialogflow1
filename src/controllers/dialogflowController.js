@@ -22,7 +22,7 @@ const handler = async (req, res) => {
    
     intentMap.set(
         `consulta_paises_envio`,
-        intents.consultaPaisesEnvio,
+        intents.listCountriesShipping,
     );
 
     intentMap.set(
@@ -31,12 +31,24 @@ const handler = async (req, res) => {
     );
 
     intentMap.set(
-        `ResName`,
-        intents.ResName,
+        `responseOurName`,
+        intents.responseOurName,
     );
     intentMap.set(
-        `ProductNotEspecific`,
-        intents.ProductNotEspecific,
+        `searchProduct`,
+        intents.searchProduct,
+    );
+    intentMap.set(
+        `createReview - Product - Valoracion - no`,
+        intents.createReviewNoReview,
+    );
+    intentMap.set(
+        `createReview - Product - Valoracion - yes - custom`,
+        intents.createReviewWithReview,
+    );
+    intentMap.set(
+        `shippingClasses`,
+        intents.shippingClasses,
     );
     
     agent.handleRequest(intentMap);

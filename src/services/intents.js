@@ -12,7 +12,7 @@ const WooCommerce = new WooCommerceRestApi({
   });
 
 
-const consultaPaisesEnvio = async (agent) => {
+const listCountriesShipping = async (agent) => {
     
     try {
 
@@ -53,21 +53,26 @@ const listProducts = async (agent) => {
 
         console.log(productsList);
 
+        const sizeList = productsList.data.length;
+        let CountProductsList = 0; // Create a counter to count the products in the list
+
         let message = "En nuestra tienda podrá comprar los siguientes productos: ";
 
         for(const product of productsList.data){
 
-            const {id, name, price} = product;
+            const {name, price} = product;
 
-            if(id != 0 && productsList.data.length-2 == id){
+            if(sizeList-2 == CountProductsList){
                 message = message + name + " por " + price + "€ y ";
             }
-            else if(id != 0 && productsList.data.length-1 == id){
+            else if(sizeList-1 == CountProductsList){
                 message = message + name + " por " + price + "€.";
             }
-            else if(id != 0 ){
+            else{
                 message = message + name + " por " + price + "€, ";
             }
+
+            CountProductsList++;
         }
 
         agent.add(message);
@@ -79,7 +84,7 @@ const listProducts = async (agent) => {
 
 }
 
-const ResName = async (agent) => {
+const responseOurName = (agent) => {
 
 
     console.log(agent.parameters);
@@ -93,7 +98,7 @@ const ResName = async (agent) => {
 
 }
 
-const ProductNotEspecific = async (agent) => {
+const searchProduct = async (agent) => {
 
 
     console.log(agent.parameters);
@@ -109,17 +114,12 @@ const ProductNotEspecific = async (agent) => {
 
             const {name} = product;
 
-            let name2 = name.toLowerCase();
+            const productName = name.toLowerCase();
+            const requestedProduct = agent.parameters.products.toLowerCase();
 
-            //console.log(name2);
+            const hasProduct = productName.includes(requestedProduct); // true or false
 
-            let productName = name2.split(' ');
-            
-            let index = productName.indexOf(agent.parameters.products);
-
-            //console.log(index);
-
-            if(index == 0){
+            if(hasProduct){
                 console.log(name);
                 message = message + name + ", ";
             }
@@ -136,6 +136,134 @@ const ProductNotEspecific = async (agent) => {
 
 }
 
+const createReviewNoReview = async (agent) => { 
+
+    const {name} = agent.parameters.person;
+    console.log(name);
+
+    const product = agent.parameters.products;
+    let requestedProduct = product.toLowerCase();
+
+    const assessment = agent.parameters.number;
+
+    try {
+
+        const productsList = await WooCommerce.get('products');
+
+        for(const product of productsList.data){
+
+            const {id, name} = product;
+
+            let productName = name.toLowerCase();
+
+            if(productName === requestedProduct){
+                
+                const data = {
+                    product_id: id,
+                    review: " ",
+                    reviewer: name, 
+                    reviewer_email: "email@email.email",
+                    rating: assessment
+                };
+
+                console.log(data);
+
+                const reviewed = await WooCommerce.post("products/reviews", data);
+
+                console.log(reviewed.data);
+
+            }
+        }
+    } catch (e) {
+        console.log("error", e);
+        agent.add(`Ha ocurrido un error al buscar el texto. Lo resolveremos lo antes posible.`);
+    }
+}
+
+const createReviewWithReview = async (agent) => {
+
+    const {name} = agent.parameters.person;
+    console.log(name);
+
+    const reqProduct = agent.parameters.products;
+    const requestedProduct = reqProduct.toLowerCase();
+
+    const userAssessment = agent.parameters.number;
+    const userReview = agent.parameters.review;
+
+    try {
+
+        const productsList = await WooCommerce.get('products');
+
+        for(const product of productsList.data){
+
+            const {id, name} = product;
+
+            let productName = name.toLowerCase();
+
+            if(productName === requestedProduct){
+                
+                const data = {
+                    product_id: id,
+                    review: userReview,
+                    reviewer: name, 
+                    reviewer_email: "email@email.email",
+                    rating: userAssessment
+                };
+
+                const reviewedDoneUser = await WooCommerce.post("products/reviews", data);
+
+                console.log(reviewedDoneUser.data);
+
+
+            }
+        }
+    } catch (e) {
+        console.log("error", e);
+        agent.add(`Ha ocurrido un error al buscar el texto. Lo resolveremos lo antes posible.`);
+    }
+
+    agent.add(`Reseña añadida con exito.`);
+            
+
+}
+
+const shippingClasses = async (agent) => {
+
+try{
+
+    const shippingClasses = await WooCommerce.get('products/shipping_classes');
+
+    console.log(shippingClasses);
+
+    let message = "Los tipos de envios que tenemos son:";
+
+    for(const shippingClass of shippingClasses.data){
+            
+            const {name, description} = shippingClass;
+    
+            if(shippingClasses.data.length-2){
+                message = message + name + ": "+ description + " y ";
+            }
+            else if(shippingClasses.data.length-1){
+                message = message + name + ": " + description + ".";
+            }
+            else if(shippingClasses.data.length){
+                message = message + name + ": "+ description + ", ";
+            }
+    }
+
+    agent.add(message);
+
+    
+
+}catch(e){
+    console.log("error", e);
+    agent.add(`Ha ocurrido un error al buscar el texto. Lo resolveremos lo antes posible.`);
+}
+    
+
+}
 
 async function defaultFallback(agent){
     try {
@@ -165,9 +293,12 @@ async function defaultFallback(agent){
 }
 
 module.exports = {
-    consultaPaisesEnvio,
+    listCountriesShipping,
     defaultFallback,
     listProducts,
-    ResName,
-    ProductNotEspecific,
+    responseOurName,
+    searchProduct,
+    createReviewNoReview,
+    shippingClasses,
+    createReviewWithReview,
 };
