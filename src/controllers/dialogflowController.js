@@ -47,8 +47,20 @@ const handler = async (req, res) => {
         intents.createReviewWithReview,
     );
     intentMap.set(
+        `statusOrder`,
+        intents.showStatusOrder,
+    );
+    intentMap.set(
         `shippingClasses`,
         intents.shippingClasses,
+    );
+    intentMap.set(
+        `deleteOrder`,
+        intents.deleteOrder,
+    );
+    intentMap.set(
+        `registerUser`,
+        intents.createUser,
     );
     
     agent.handleRequest(intentMap);
