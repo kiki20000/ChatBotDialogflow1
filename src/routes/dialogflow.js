@@ -8,6 +8,7 @@ const client = new OAuth2Client();
 const jwt = require('jsonwebtoken');
 
 const dialogflowController = require('../controllers/dialogflowController');
+const woocommerceController = require('../controllers/woocommerceController');
 
 const allowAuthenticated = async function (req, res, next) {
     try {
@@ -30,6 +31,12 @@ router.post(
     '/webhook',
     //allowAuthenticated,
     dialogflowController.handler,
+);
+
+router.post(
+    '/user',
+    //allowAuthenticated,
+    woocommerceController.addUserWoo,
 );
 
 module.exports = router;
