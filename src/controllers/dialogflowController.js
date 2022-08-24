@@ -3,9 +3,13 @@
 const { WebhookClient } = require('dialogflow-fulfillment');
 
 const intents = require('../services/intents');
+const prestashop = require('../services/prestashop');
 process.env.DEBUG = 'dialogflow:debug';
 
 const handler = async (req, res) => {
+
+    console.log(req.body);
+
     if (!req.body.queryResult.fulfillmentMessages) return;
     req.body.queryResult.fulfillmentMessages =
         await req.body.queryResult.fulfillmentMessages.map((m) => {
@@ -27,7 +31,7 @@ const handler = async (req, res) => {
 
     intentMap.set(
         `listProducts`,
-        intents.listProducts,
+        prestashop.listProducts,
     );
 
     intentMap.set(
@@ -62,6 +66,8 @@ const handler = async (req, res) => {
         `registerUser`,
         intents.createUser,
     );
+
+
     
     agent.handleRequest(intentMap);
 };
