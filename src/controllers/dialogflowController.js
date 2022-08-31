@@ -3,6 +3,8 @@
 const { WebhookClient } = require('dialogflow-fulfillment');
 
 const intents = require('../services/intents');
+const prestashop = require('../services/prestashop');
+
 process.env.DEBUG = 'dialogflow:debug';
 
 const handler = async (req, res) => {
@@ -22,21 +24,21 @@ const handler = async (req, res) => {
    
     intentMap.set(
         `consulta_paises_envio`,
-        intents.listCountriesShipping,
+        prestashop.listZonesShipping,
     );
 
     intentMap.set(
         `listProducts`,
-        intents.listProducts,
+        prestashop.listProducts,
     );
 
     intentMap.set(
         `responseOurName`,
-        intents.responseOurName,
+        prestashop.responseOurName,
     );
     intentMap.set(
         `searchProduct`,
-        intents.searchProduct,
+        prestashop.searchProduct,
     );
     intentMap.set(
         `createReview - Product - Valoracion - no`,
@@ -52,15 +54,15 @@ const handler = async (req, res) => {
     );
     intentMap.set(
         `shippingClasses`,
-        intents.shippingClasses,
+        prestashop.typesShipping,
     );
     intentMap.set(
         `deleteOrder`,
-        intents.deleteOrder,
+        prestashop.deleteOrder,
     );
     intentMap.set(
         `registerUser`,
-        intents.createUser,
+        prestashop.createUsers,
     );
     
     agent.handleRequest(intentMap);

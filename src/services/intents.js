@@ -14,9 +14,6 @@ const WooCommerce = new WooCommerceRestApi({
 const listCountriesShipping = async (agent) => {
     try {
         const shippingZones = await WooCommerce.get('shipping/zones');
-
-        console.log(shippingZones);
-
         let message = 'Actualmente hacemos envíos a: ';
 
         for (const zone of shippingZones.data) {
