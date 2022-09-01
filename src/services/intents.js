@@ -54,7 +54,7 @@ const listProducts = async (agent) => {
             const { name, price, regular_price, description, permalink, stock_quantity, average_rating, images } =
                 product;
 
-            /*if(sizeList-2 == CountProductsList){
+            if(sizeList-2 == CountProductsList){
                 message = message + name + " por " + price + "€ y ";
             }
             else if(sizeList-1 == CountProductsList){
@@ -64,14 +64,14 @@ const listProducts = async (agent) => {
                 message = message + name + " por " + price + "€, ";
             }
 
-            CountProductsList++;*/
+            CountProductsList++;
 
             console.log(name);
-            console.log(price);
-            console.log(regular_price);
-            console.log(description);
-            console.log(permalink);
-            console.log(stock_quantity);
+            // console.log(price);
+            // console.log(regular_price);
+            // console.log(description);
+            // console.log(permalink);
+            // console.log(stock_quantity);
             console.log(average_rating);
 
             let subtitle = `${description}\n Rating: ${average_rating}\n\n <br> Precio: ${price}€`;
@@ -553,3 +553,5 @@ module.exports = {
     deleteOrder,
     createUser,
 };
+
+
